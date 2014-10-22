@@ -1,0 +1,35 @@
+library(ggplot2)
+
+#uploading the file and getting the data from quizdata.csv
+Qdata<- read.csv(file="quizdata.csv", header=TRUE, sep=",")
+
+#displaying the data 
+Qdata
+
+#collecting the rows we want 
+Qdata.new<- Qdata[grep("color", quizData$Favorite),]
+#displaying the data 
+Qdata.new
+
+#Eliminating the row in which yellow is written
+Qdata.new1 <- quizData.new[-grep("yellow", quizData.1$Favorite),]
+#displaying the data 
+Qdata.new1
+
+# eliminate extraneous data
+Qdata.new2 <- gsub("My favorite color is ", "   ", Qdata.new1$Favorite)
+
+#Displaying the  colors name only
+Qdata.new2
+
+#Combining vector frame to the orginal data frame
+Qdata.new3 <- data.frame(Qdata.new1,Qdata.new2)
+
+#Displaying the frame
+Qdata.new3
+
+#ploting the graph between the favorite color and the users with the use of specific color
+ggplot(data=Qdata.new3, aes(x=Qdata.new2, fill=Qdata.new2)) +  #set x axis 
+  geom_bar(stat="bin")+ scale_fill_manual(values=c("#0000FF", "#008000","#FF0000"),name="colors") +  # set diffrent colors
+  xlab("Favorite Color") + ylab("Users")  #writing name on x axis and y axis 
+

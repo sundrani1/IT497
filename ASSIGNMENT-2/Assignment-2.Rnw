@@ -1,0 +1,172 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx, verbatim}
+\setlength{\textwidth}{6.5in} 
+\setlength{\textheight}{9in}
+\setlength{\oddsidemargin}{0in} 
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{-1.5cm}
+\usepackage{Sweave}
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\input{rahul1-concordance}
+
+\title {\textbf{Chicago Bulls}}
+\author{Rahul Sundrani\\
+School of Information technology \\
+Illinois state unversity \\
+\texttt{rsundra@ilstu.edu}}
+
+\maketitle \textbf {}
+
+\section{Introduction}
+
+
+
+The Chicago Bulls was founded on January 26, 1966. They are an American professional basketball team based in Chicago, Illinois. The Bulls are related with  Michael Jordan, who led the team to six NBA championships.
+In 1996 the Chicago Bulls won an NBA record of 72 games during an NBA season. They are the only team in NBA history to win 70 games or more in a single season. The Chicago Bulls were predicted to be the third most valuable NBA franchise, earning an estimated 52.2 million dollars in operating income in 2013. Derrick Rose and Michael Jordan have  won the NBA most valuable player award.
+The mascot was first introduced in 1969 as the Bulls Benny, and another mascot of Chicago Bulls is named Da Bull. 
+
+\subsection{Interesting Fact}
+\begin{itemize}
+\item Chicago Bulls won six championships in eight years with two three\-peats.
+
+\item The six of those championship teams were led by Michael Jordan, Scottie Pippen and coach Phil Jackson.
+
+\item The Chicago Bulls won an NBA record of 72 games during the 1995 \textendash 96 NBA season.
+\item The Detroit Pistons are historically considered the Bulls biggest rivals due to the Jordan era in the late 80s and early 90s.
+\item The Chicago Bulls is the only team in the NBA history to win 70 games in a single season.
+
+\end{itemize}
+
+
+\section {Reproducible Research}
+\subsection{code}
+<<reg>>=
+## load packages
+#This package help to access Quandl data directly from within R.
+library(Quandl) 
+#This package help tp plot the graph
+library(ggplot2) 
+<<reg,echo=TRUE>>=
+#Quandl commands help us to retrieve data from the link directly
+cbulls = Quandl("BBALL/NBA_CHICAGOBULLS",authcode="p58gxzoFqVzMLY7jVgPS") 
+cbulls #Displaying current data
+@
+
+In the above steps we are just picking a dataset and entering its Quandl code. You can find your auth\_ token under the API tab on your account page. With the Quandl account, registering is free and only takes a few seconds.
+The Quandl package is able to return data in 4 very usable formats: data frame raw, ts, zoo and xts. The default is raw data type.
+
+<<reg>>=
+#Full Data Retriive 
+cbulls.new <-cbulls[, -3:-5]#Removing the older column 
+
+@
+<<reg,echo=TRUE>>=
+#Steps in cleaning your data
+cbulls.new1 <- cbulls.new[, -5:-5]#cleaning of data
+cbulls.new1 #Displaying the data frame
+colnames (cbulls.new1)[3] <-"PS" #changing the column name
+colnames (cbulls.new1)[4] <-"PA" #changing the column Name
+cbulls.new1
+@
+With the help of functions,I am deleting and cleaning the data frame. I have changed the column name in the data frame from PS/G to PS and PA/G to PA. 
+
+
+\subsection{Class}
+
+<<reg>>=
+
+#using class function
+class(cbulls.new1)
+@
+This attribute is a character vector containing the list of classes that an object inherits from. 
+The data objects existing in R are vectors, arrays, matrices, tables and data frames.
+
+Looking at the above result, we can say that the object which is stored in the data frame called "cbulls.new1." 
+\subsection{str()}
+The str function is the most useful function which provides great information about the structure of some object. This function for data frames provides the information they are used to seeing on the variable view tab. Also this function helps to display the information in diffrent format (e.g. as an HTML or LaTeX table).
+
+<<reg>>=
+
+#using str function
+str(cbulls.new1)
+@
+\subsection{Summary}
+<<reg>>=
+#using summary function which is used to represent nearly every dataset
+summary(cbulls.new1)
+@
+
+The summary attribute is used to display the statistical objects, and generally the output of some model fitting process. The summary attribute will provide output for the results of any analysis.
+The output of the summary() function shows you for every variable a set of descriptive statistics, depending on the type of the variable:
+
+\begin {itemize}
+\item Numerical variables: gives you the range, quartiles, median, and mean.
+\item Factor variables: gives you a table with frequencies.
+\item Numerical and factor variables:  gives you the number of missing values.
+\item Character variables: does not give you any information.
+\end{itemize}
+\section {Result}
+\subsection{Data Set}
+ 
+<<reg>>=
+cbulls.new1
+@
+\textbf Year: is a date column that can have values from 1st January 1970 to  2014.
+
+\textbf Wins: is a numeric value can have any values between 0 and 82. The
+
+maximum number of games that a NBA team can play in a year is 82.
+
+\textbf PS: It is calculated by dividing the total number of points(team) by number of games(team).
+
+\textbf PA: It is the total number of points against(team) by number of games(team).
+
+Points scored and points against example:
+Game 1:  bulls 100 beat spurs 90
+Game 2:  bulls 90 beat clippers 80
+Game 3:  bulls 110 lost to lakers 120
+
+From these 3 games bulls point scored per game would be ( 100 + 90 + 110)/ 3 = 100
+
+Points against per game will be the sum of points scored by the other 3 teams they faced and then divided by 3 . In this case it would be  ( 90 + 80 + 120)/3 = 96.66
+
+So this way instead of 3 it is done for a whole regular season which consists of 82 games.
+
+\subsection{Graph}
+
+<<label=Fig1,fig=TRUE,echo=TRUE>>=
+
+# Graph plot between points scored per game (PS/G) and points against per game (PA/G)
+ggplot(data=cbulls.new1, aes(Year))+geom_line(aes(y=Wins, color="Wins"))+geom_line(aes(y=PS, color="points scored per game  "))+geom_line(aes(y=PA, color="points against per game "))+xlab("Year") + ylab("Wins")+ ggtitle("Chicago Bulls")   #Set title
+
+@
+The graph shows the number of wins of the Chicago Bulls. The Chicago Bulls won more games in 1996 with an 82 \textendash game schedule 72.The 1996 team that went 72-10 (NBA record) in route to a fourth Bulls championship.The blue line is showing points scored game and the green one shows points scored againts game in championship.In 1996 the points scored per game is much higher.In year 1997 Chicago Bulls wins 69 games and got second consecutive NBA title.
+
+
+
+<<label=Fig2,fig=TRUE,echo=TRUE>>=
+#ploting of graph between PS/G,Year,Wins
+ggplot(cbulls.new1, aes(Year, PS)) +geom_bar(aes(fill = Wins), position = "dodge", stat="identity")+xlab("Year") + ylab("Wins")+ ggtitle("points scored per game")   # Set title
+
+@
+The graph shows the number of wins in a particular year and also points scored per game in a particular year.The 1969-70 team finished  39-43 and was the highest-scoring Bulls outfit in history, putting up 114.9 points per game.On the other hand number of wins were more in 1996 year.In year around 2000 there was downfall in history of the Chicago bulls.
+
+
+<<label=Fig3,fig=TRUE,echo=TRUE>>=
+#ploting of graph between PA/G,Year,Wins
+ggplot(cbulls.new1, aes(Year, PA)) +geom_bar(aes(fill = Wins), position = "dodge", stat="identity")+xlab("Year") + ylab("Wins") + ggtitle("points against per game ")   # Set title
+
+@
+The graph shows the number of wins in a particular year and also points scored against per game in a particular year.In the early 1990s, the Bulls assembled a strong supporting cast for Jordan and Pippen which won three consecutive NBA titles, becoming the third franchise in history to string together a trio of crowns.Michael Jordan was driven to lead the Bulls to the NBA championship for the fourth time in six years.  In 1996 the number of wins and points scored per game was highest and in year 2000 there was lowest total number of points(team) by number of games(team).
+\subsection{Conclusion}
+The Chicago Bulls are the most successful franchise in terms of Championships in the National Basketball Association. With two of the greatest basketball players of all time, Michael Jordan and Scottie Pippen, and with coach Phil Jackson, the Chicago Bulls are well known for the greatest regime in the 1990's. They managed together to win 6 NBA Championships in the 90's decade. In the 1990s, the Bulls helped spread the popularity of the NBA around the world. The Chicago Bulls are the only team in history to win 70 or more games in a single season (1995\textendash 1996). The Bulls won many of the postseason awards: Jordan was named the league's Most Valuable Player.
+ 
+\section{References}
+http://www.nba.com/bulls/history/Chicago\_ Bulls\_ History-24393-42.html
+
+
+
+\end{document}
